@@ -1,0 +1,22 @@
+workflows:
+  ios-workflow:
+    name: Build iOS app
+    max_build_duration: 60
+    environment:
+      xcode: latest
+      vars:
+        APP_SCHEME: HealthExportApp
+        PROJECT_PATH: HealthExportApp/HealthExportApp.xcodeproj
+    scripts:
+      - name: Install dependencies
+        script: |
+          # Jeśli masz jakieś zależności np. CocoaPods to tu je instalujesz
+          # Pod przykładem jest instalacja CocoaPods
+          if [ -f Podfile ]; then
+            pod install
+          fi
+      - name: Build
+        script: |
+          xcodebuild -scheme $APP_SCHEME -project $PROJECT_PATH -configuration Release clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+    artifacts:
+      - build/Release-iphoneos/*.ipa
